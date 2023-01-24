@@ -4,6 +4,7 @@ import psutil
 import socket
 import json
 import subprocess
+import uuid
 #-----some variables----
 port=40534 #right now gonna leave it like that, may be changed
 #-----------------------
@@ -17,6 +18,7 @@ def collect_sysinf():
     f=open("/sys/class/dmi/id/bios_version","r")
   
     result = {
+            "uuid":str(uuid.UUID(int=uuid.getnode())).replace("-","_"),
             "system":uname.system,
             "architecture":uname.machine,
             "bios_ver":f.read()[:-1],
@@ -35,7 +37,6 @@ def collect_sysinf():
         result.update({temp[0]:temp[1]})
          
     return json.dumps(result)
-
 addr=input("Put ip address of server you want to send data (press enter for 127.0.0.1):")
 if addr=="":
     addr="127.0.0.1"
